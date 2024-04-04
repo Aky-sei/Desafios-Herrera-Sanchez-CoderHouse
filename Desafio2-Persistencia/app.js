@@ -93,12 +93,11 @@ class ProductManager {
                 if (codeExist) {
                     throw new Error("El campo 'code' no puede repetirse")
                 } else {
-                    // Se elimina el producto anterior sirviendonos del indice hallado anteriormente.
-                    data.splice(index,1)
-                    // Se crea un objeto temporal, esta vez conservando el id del objeto anterior.
+                    // Se crea un objeto temporal con los datos del nuevo producto, pero conservando el id anterior.
                     const temp = {...newProduct, id: id}
-                    data.push(temp)
-                    // Se sebreescribe el archivo con el nuevo arreglo tras agregar el nuevo producto.
+                    // Se reemplaza el objeto anterior por el nuevo.
+                    data[index] = temp
+                    // Se sebreescribe el archivo con el nuevo arreglo tras actualizar el producto.
                     await fs.writeFile(this.path,JSON.stringify(data, null, 2))
                     console.log("Producto actualizado correctamente")
                 }
@@ -149,9 +148,9 @@ async function a () {
 
     // Se deja comtada una instancia de cada metodo relevante para facilitar la revisión.
 // -----------------------------------
-    // await productManager.addProduct(product2)
-    // await productManager.updateProduct(2,product4)
-    // await productManager.deleteProduct(4)
+    // await productManager.addProduct(product1)
+    // await productManager.updateProduct(1,product2)
+    // await productManager.deleteProduct(3)
     // console.log(data)
 // ------------------------------------
 
