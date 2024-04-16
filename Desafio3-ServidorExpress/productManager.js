@@ -1,3 +1,5 @@
+// Mismo archivo del desafio anterior con ligeros ajustes basados en los comentarios del mismo.
+
 import { promises as fs } from 'fs'
 
 class Product {
@@ -49,7 +51,6 @@ class ProductManager {
     async getProducById (id) {
         try {
             let data = await this.getProducts()
-            console.log(id)
             const temp = data.find(prod => prod.id === id)
             if (temp) {
                 return temp
@@ -97,4 +98,5 @@ class ProductManager {
     }
 }
 
+// Se exporta tanto ProductManager como Product preparandonos para una futura implementación de metodos "put" o "post"
 export {ProductManager, Product}
