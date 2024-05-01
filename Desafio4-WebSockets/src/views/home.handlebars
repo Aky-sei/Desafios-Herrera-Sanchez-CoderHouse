@@ -1,0 +1,14 @@
+<div id="productsDiv" class="productsDiv">
+    {{#each products}}
+    <div id="product{{this.id}}" class="productContainer">
+        <p><strong>Title:</strong> {{this.title}}</p>
+        <p><strong>Description:</strong> {{this.description}}</p>
+        <p><strong>Code:</strong> {{this.code}}</p>
+        <p><strong>Price:</strong> {{this.price}}</p>
+        <p><strong>Status:</strong> {{this.status}}</p>
+        <p><strong>Stock:</strong> {{this.stock}}</p>
+        <p><strong>Category:</strong> {{this.category}}</p>
+        <p><strong>Id: {{this.id}}</strong></p>
+    </div>
+    {{/each}}
+</div>

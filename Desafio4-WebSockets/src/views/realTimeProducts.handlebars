@@ -1,0 +1,51 @@
+<div id="productsDiv" class="productsDiv">
+    {{#each products}}
+    <div id="product{{this.id}}" class="productContainer">
+        <p><strong>Title:</strong> {{this.title}}</p>
+        <p><strong>Description:</strong> {{this.description}}</p>
+        <p><strong>Code:</strong> {{this.code}}</p>
+        <p><strong>Price:</strong> {{this.price}}</p>
+        <p><strong>Status:</strong> {{this.status}}</p>
+        <p><strong>Stock:</strong> {{this.stock}}</p>
+        <p><strong>Category:</strong> {{this.category}}</p>
+        <p><strong>Id: {{this.id}}</strong></p>
+    </div>
+    {{/each}}
+</div>
+
+<h1>AÑDIR PRODUCTO</h1>
+<form id="addProductForm">
+    <label>
+        Title: <input type="text" name="title" id="title" value="producto prueba">
+    </label> <br>
+    <label>
+        Description: <input type="text" name="description" id="description" value="Este es un producto de prueba">
+    </label> <br>
+    <label>
+        Code: <input type="text" name="code" id="code" value="abc111111">
+    </label> <br>
+    <label>
+        Price: <input type="number" name="price" id="price" value="200">
+    </label> <br>
+    <label>
+        Status: <input type="text" name="status" id="status" value="true">
+    </label> <br>
+    <label>
+        Stock: <input type="number" name="stock" id="stock" value="25">
+    </label> <br>
+    <label>
+        Category: <input type="text" name="category" id="category" value="producto">
+    </label> <br>
+    <input type="submit" value="Añadir Producto"/>
+</form>
+
+<h1>ELIMINAR PRODUCTO</h1>
+<form id="deleteProductForm">
+    <label>
+        ID: <input type="text" name="id" id="id" value="11">
+    </label> <br>
+    <input type="submit" value="Eliminar Producto"/>
+</form>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/index.js"></script>
