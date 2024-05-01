@@ -4,11 +4,10 @@ const router =  express.Router()
 
 const productManager = new ProductManager('./src/data/products.json')
 
-router.get("/api/products", async (req, res)=> {
+router.get("/", async (req, res)=> {
     try {
         const products = await productManager.getProducts()
         const limit = parseInt(req.query.limit)
-        // Logica un poco más extensa para añadir la funcionalidad de "?limit="
         if (limit) {
             res.json({status:"success", message:products.slice(0,limit)}) 
         } else {
@@ -20,7 +19,7 @@ router.get("/api/products", async (req, res)=> {
     }
 })
 
-router.get('/api/products/:pid', async (req, res) => {
+router.get('/:pid', async (req, res) => {
     try {
         const product = await productManager.getProducById(parseInt(req.params.pid))
         res.json({status:"success", message:product})
@@ -30,7 +29,7 @@ router.get('/api/products/:pid', async (req, res) => {
     }
 })
 
-router.post('/api/products', async (req,res) => {
+router.post('/', async (req,res) => {
     try {
         await productManager.addProduct(req.body)
         res.json({status:"success", message:"Producto añadido correctamente"}) 
@@ -40,7 +39,7 @@ router.post('/api/products', async (req,res) => {
     }
 })
 
-router.put('/api/products/:pid', async (req,res) => {
+router.put('/:pid', async (req,res) => {
     try {
         await productManager.updateProduct(parseInt(req.params.pid), req.body)
         res.json({status:"success", message:"Producto actualizado correctamente"}) 
@@ -50,7 +49,7 @@ router.put('/api/products/:pid', async (req,res) => {
     }
 })
 
-router.delete('/api/products/:pid', async (req,res) => {
+router.delete('/:pid', async (req,res) => {
     try {
         await productManager.deleteProduct(parseInt(req.params.pid))
         res.json({status:"success", message:"Producto eliminado correctamente"}) 

@@ -4,7 +4,7 @@ const router = express.Router()
 
 const cartManager = new CartManager('./src/data/carts.json')
 
-router.get("/api/carts", async (req,res) => {
+router.get("/", async (req,res) => {
     try {
         const data = await cartManager.getCarts()
         res.json({status: "success", message: data})
@@ -14,7 +14,7 @@ router.get("/api/carts", async (req,res) => {
     }
 })
 
-router.post("/api/carts", async (req,res) => {
+router.post("/", async (req,res) => {
     try {
         await cartManager.addCart()
         res.json({status: "success", message: "Carrito añadido correctamente"})
@@ -24,7 +24,7 @@ router.post("/api/carts", async (req,res) => {
     }
 })
 
-router.get("/api/carts/:cid", async (req,res) => {
+router.get("/:cid", async (req,res) => {
     try {
         const data = await cartManager.getCartById(parseInt(req.params.cid))
         res.json({status: "success", message: data.products})
@@ -34,7 +34,7 @@ router.get("/api/carts/:cid", async (req,res) => {
     }
 })
 
-router.post("/api/carts/:cid/product/:pid", async (req,res) => {
+router.post("/:cid/product/:pid", async (req,res) => {
     try {
         await cartManager.addProductToCart(parseInt(req.params.cid),parseInt(req.params.pid))
         res.json({status: "success", message: "El producto se agrego al carrito correctamente"})
