@@ -1,0 +1,12 @@
+{{#if isLoged }}
+    <a href="/profile"><button>Ver Perfil</button></a>
+    <a href="/cart"><button>VerCarrito</button></a>
+    <a href="/products"><button>Comprar</button></a>
+    <a href="/chat"><button>Chat</button></a> <br>
+    <form action="/api/session/logout" method="POST">
+        <input type="submit" value="Log-out">
+    </form>
+{{else}}
+    <a href="/login"><button>Logear</button></a>
+    <a href="/register"><button>Registrarse</button></a>
+{{/if}}
