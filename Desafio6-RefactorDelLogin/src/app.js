@@ -26,7 +26,7 @@ app.use(session({
     saveUninitialized: true,
     store: MongoStore.create({ 
         mongoUrl: 'mongodb+srv://diegohs:diegohs0204@codercluster.b2nuohi.mongodb.net/ecommerce?retryWrites=true&w=majority&appName=CoderCluster',
-        ttl: 24*60*60 // Un dia
+        ttl: 60*60 // Un dia
     })
 }))
 app.engine('handlebars', handlebars.engine())

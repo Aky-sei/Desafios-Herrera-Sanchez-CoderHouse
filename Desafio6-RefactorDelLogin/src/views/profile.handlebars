@@ -1,0 +1,25 @@
+<header>
+    <form action="/api/session/logout" method="POST">
+        <input type="submit" value="Log-out">
+    </form>
+    <a href="/cart"><button>Cart</button></a>
+    <a href="/products"><button>Ir a comprar</button></a>
+    <a href="/chat"><button>Chat</button></a>
+</header>
+<div>
+    <h3>Nombre:</h3>
+    <p>{{user.name}}</p>
+    <h3>Apellido:</h3>
+    <p>{{user.lastName}}</p>
+    <h3>E-mail:</h3>
+    <p>{{user.email}}</p>
+    {{#if user.age}}
+    <h3>Edad:</h3>
+    <p>{{user.age}}</p>
+    {{/if}}
+    {{#if user.isAdmin}}
+    <h3>Felicidades, tienes permisos de administrador.</h3>
+    {{else}}
+    <h3>Lamentablemente, no tienes permisos de administrador.</h3>
+    {{/if}}
+</div>
