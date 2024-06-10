@@ -11,7 +11,7 @@ form.addEventListener("submit", async (e) => {
     }).then(res => res.json())
     .then((body) => {
         if(body.status === "success") {
-            window.location.href = '/products'
+            window.location.href = '/profile'
         } else {
             if(body.error === "Usuario-no-encontrado") {
                 Swal.fire({

@@ -11,6 +11,8 @@ import { messageModel } from './dao/models/message.model.js'
 import mongoose from 'mongoose'
 import MongoStore from 'connect-mongo'
 import session from 'express-session'
+import passport from 'passport'
+import initializePassport from './config/passport.config.js'
 
 const app = express()
 const PORT = 8080
@@ -29,6 +31,11 @@ app.use(session({
         ttl: 60*60 // Un dia
     })
 }))
+
+initializePassport()
+app.use(passport.initialize())
+app.use(passport.session())
+
 app.engine('handlebars', handlebars.engine())
 app.set('views', __dirname + '/views')
 app.set('view engine', 'handlebars')

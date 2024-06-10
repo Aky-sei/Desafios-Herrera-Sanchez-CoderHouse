@@ -1,50 +1,36 @@
 import express from 'express'
-import { userModel } from '../dao/models/user.model.js'
-import { cartModel } from '../dao/models/cart.model.js'
+import passport from 'passport'
 const router = express.Router()
 
-router.post('/register', async (req,res) => {
-    try {
-        const {name,lastName,email,age,password,isAdmin} = req.body
-        const cart = await cartModel.create({products: []})
-        await userModel.create({
-            "name": name,
-            "lastName": lastName,
-            "email": email,
-            "age": age,
-            "password": password,
-            "isAdmin": isAdmin==='on' ? true : false,
-            "cart": cart._id
-        })
-        res.redirect('/login')
-    } catch (error) {
-        console.error("Error al registrar el usuario", error)
-        res.status(500).send({status:"error", error:"Error al registrar el usuario"})
-    }
+router.post('/register', passport.authenticate('register',{failureRedirect:'/failregister'}) , async (req,res) => {
+    res.redirect('/login')
+})
+router.get('/failregister', async(req,res) => {
+    res.json("usuario ya registrado")
 })
 
-router.post('/login', async (req, res) => {
-    try {
-        const {email, password} = req.body
-        const user = await userModel.findOne({email: email}).populate('cart').lean()
-        if (user) {
-            if (password == user.password) {
-                req.session.user = {...user}
-                res.json({status: "success"})
-            } else {
-                res.json({status: "error", error: "Constraseña-incorrecta"})
-            }
-        } else {
-            res.json({status: "error", error: "Usuario-no-encontrado"})
-        }
-    } catch (error) {
-        console.log("asdasds")
-        console.error("error al logearse", error)
+router.post('/login', passport.authenticate('login') , async (req, res) => {
+    // Se cambia un poco la logida par reutilizar la logice previa de "contraseña incorrecta" y "usuario no encontrado"
+    if (req.user !== "Usuario-no-encontrado" && req.user !== "Constraseña-incorrecta") {
+        console.log(req.user)
+        req.session.user = {...req.user}
+        res.json({status:"success"})
+    } else {
+        res.json({status:"error", error:req.user})
     }
 })
 
 router.post('/logout', (req,res) => {
     req.session.destroy(res.redirect('/login'))
+})
+
+// GitHub
+
+router.get('/github', passport.authenticate('github',{scope:['user:email']}),async(req,res)=>{})
+
+router.get('/githubcallback', passport.authenticate('github',{failureRedirect:'/login'}),async(req,res)=>{
+    req.session.user = {...req.user}
+    res.redirect('/profile')
 })
 
 export {router}

@@ -10,6 +10,10 @@ router.get('/', async (req, res) => {
         res.render('home', {
             isLoged: true
         })
+    } else {
+        res.render('home', {
+            isLoged: false
+        })
     }
 })
 

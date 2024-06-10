@@ -8,3 +8,13 @@
     <input type="submit" value="Registrarse">
 </form>
 <a href="/login"><button>Logearse</button></a>
+
+{{#if error}}
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        Swal.fire({
+            title: `Ese correo ya esta en uso`,
+            allowOutsideClick: true
+        })
+    </script>
+{{/if}}
