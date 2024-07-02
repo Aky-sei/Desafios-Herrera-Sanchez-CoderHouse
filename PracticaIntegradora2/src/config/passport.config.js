@@ -1,13 +1,31 @@
 import passport from 'passport'
 import local from 'passport-local'
 import GitHubStrategy from 'passport-github2'
+import jwt from 'passport-jwt'
 import { userModel } from '../dao/models/user.model.js'
 import { cartModel } from '../dao/models/cart.model.js'
 import { createHash, isValidPassword } from '../utils.js'
 
 const LocalStrategy = local.Strategy
 
+const cookieExtractor = req => {
+    let token = null
+    if (req && req.cookies){
+        token = req.cookies['coderCookieToken']
+    }
+}
+
 const initializePassport = () => {
+
+    passport.use('jwt', new jwt.Strategy(
+        { jwtFromRequest: jwt.ExtractJwt.fromExtractors([cookieExtractor]), secretOrKey: 'claveSecreta'}, async (jwt_payload, done) => {
+            try {
+                return done(null, jwt_payload)
+            } catch (error) {
+                return done(error)
+            }
+        }
+    ))
 
     passport.use('register', new LocalStrategy(
         { passReqToCallback: true, usernameField: 'email' }, async (req, username, password, done) => {
@@ -43,18 +61,18 @@ const initializePassport = () => {
         done(null, user);
     });
 
-    passport.use('login', new LocalStrategy({ usernameField: 'email' }, async (username, password, done) => {
-        try {
-            const user = await userModel.findOne({ email: username }).populate('cart').lean()
-            if (!user) {
-                return done(null, "Usuario-no-encontrado")
-            }
-            if (!isValidPassword(user, password)) return done(null, "Constraseña-incorrecta")
-            return done(null, user)
-        } catch (error) {
-            return done(error)
-        }
-    }))
+    // passport.use('login', new LocalStrategy({ usernameField: 'email' }, async (username, password, done) => {
+    //     try {
+    //         const user = await userModel.findOne({ email: username }).populate('cart').lean()
+    //         if (!user) {
+    //             return done(null, "Usuario-no-encontrado")
+    //         }
+    //         if (!isValidPassword(user, password)) return done(null, "Constraseña-incorrecta")
+    //         return done(null, user)
+    //     } catch (error) {
+    //         return done(error)
+    //     }
+    // }))
 
     // Gibhub
 

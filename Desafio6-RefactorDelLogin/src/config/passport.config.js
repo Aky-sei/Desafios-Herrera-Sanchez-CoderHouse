@@ -63,6 +63,7 @@ const initializePassport = () => {
         clientSecret:'f740ab622b93f27f3198525c49fd08b016244cd5',
         callbackURL:'http://localhost:8080/api/session/githubcallback'
     }, async (accessToken,refreshToken,profile,done) => {
+        console.log(profile._json)
         try {
             let user = await userModel.findOne({email:profile._json.email}).populate('cart').lean()
             let cart = await cartModel.create({products: []})

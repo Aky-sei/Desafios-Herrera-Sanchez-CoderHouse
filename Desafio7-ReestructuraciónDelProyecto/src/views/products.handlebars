@@ -1,0 +1,92 @@
+<header>
+    <form action="/api/sessions/logout" method="POST">
+        <input type="submit" value="Log-out">
+    </form>
+    <a href="/cart"><button>Cart</button></a>
+    <a href="/profile"><button>Perfil</button></a>
+    <a href="/chat"><button>Chat</button></a>
+</header>
+{{#if isLoged}}
+<h1>Hola {{user.fullName}}, bienvenido a la tienda.</h1>
+{{else}}
+<h1>Hola Visitante, bienvenido a la tienda.</h1>
+{{/if}}
+<div id="productsDiv" class="productsDiv">
+    <input type="hidden" value="{{user.cart}}" id="cartID">
+    {{#if products}}
+    {{else}}
+    <h1>Lo sentimos, no hay productos en esta pagina. <a href="{{prevLink}}">Volver</a></h1>
+    {{/if}}
+    {{#each products}}
+    <div id="product{{this._id}}" class="productContainer">
+        <p><strong>Title:</strong> {{this.title}}</p>
+        <p><strong>Description:</strong> {{this.description}}</p>
+        <p><strong>Code:</strong> {{this.code}}</p>
+        <p><strong>Price:</strong> {{this.price}}</p>
+        <p><strong>Status:</strong> {{this.status}}</p>
+        <p><strong>Stock:</strong> {{this.stock}}</p>
+        <p><strong>Category:</strong> {{this.category}}</p>
+        <p><strong>Id: {{this._id}}</strong></p>
+        <button onclick="addToCart(`{{this._id}}`)">Añadir al carrito</button>
+    </div>
+    {{/each}}
+</div>
+<script>
+    const cid = document.getElementById("cartID").value
+    function addToCart(pid) {
+        fetch(`/api/carts/${cid}/products/${pid}`, {
+            method: "POST",
+            headers: {'Content-Type': 'application/json'}
+            })
+    }
+</script>
+<div>
+    {{#if products}}
+    {{#if pageData.hasPrevPage}}
+    <a href="{{prevLink}}"><button>-</button></a>
+    {{/if}}
+    <p>{{pageData.page}}/{{pageData.totalPages}}</p>
+    {{#if pageData.hasNextPage}}
+    <a href="{{nextLink}}"><button>+</button></a>
+    {{!-- <a href="/products?page={{nextPage}}"><button id="nextPageBtn">+</button></a> --}}
+    {{/if}}
+    {{/if}}
+</div>
+{{#if isAdmin}}
+<h1>PANEL DE ADMINISTRADOR:</h1>
+<h1>AÑDIR PRODUCTO</h1>
+<form id="addProductForm">
+    <label>
+        Title: <input type="text" name="title" id="title" value="producto prueba">
+    </label> <br>
+    <label>
+        Description: <input type="text" name="description" id="description" value="Este es un producto de prueba">
+    </label> <br>
+    <label>
+        Code: <input type="text" name="code" id="code" value="abc111111">
+    </label> <br>
+    <label>
+        Price: <input type="number" name="price" id="price" value="200">
+    </label> <br>
+    <label>
+        Status: <input type="text" name="status" id="status" value="true">
+    </label> <br>
+    <label>
+        Stock: <input type="number" name="stock" id="stock" value="25">
+    </label> <br>
+    <label>
+        Category: <input type="text" name="category" id="category" value="producto">
+    </label> <br>
+    <input type="submit" value="Añadir Producto"/>
+</form>
+
+<h1>ELIMINAR PRODUCTO</h1>
+<form id="deleteProductForm">
+    <label>
+        ID: <input type="text" name="id" id="id" value="11">
+    </label> <br>
+    <input type="submit" value="Eliminar Producto"/>
+</form>
+
+<script src="/js/productsAdmin.js"></script>
+{{/if}}

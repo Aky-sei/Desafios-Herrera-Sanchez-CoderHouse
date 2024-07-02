@@ -1,8 +1,8 @@
 import express from 'express'
-import { router as productsRouter } from './routes/products.router.js'
-import { router as cartsRouter } from './routes/carts.router.js'
-import { router as viewsRouter } from './routes/views.router.js'
-import { router as sessionRouter } from './routes/session.router.js'
+import ProductsRouter from './routes/products.router.js'
+import CartsRouter from './routes/carts.router.js'
+import ViewsRouter from './routes/views.router.js'
+import SessionRouter from './routes/session.router.js'
 import __dirname from './utils.js'
 import handlebars from 'express-handlebars'
 import { Server } from 'socket.io'
@@ -13,6 +13,7 @@ import MongoStore from 'connect-mongo'
 import session from 'express-session'
 import passport from 'passport'
 import initializePassport from './config/passport.config.js'
+import cookieParser from 'cookie-parser'
 
 const app = express()
 const PORT = 8080
@@ -34,17 +35,21 @@ app.use(session({
 
 initializePassport()
 app.use(passport.initialize())
-app.use(passport.session())
+app.use(cookieParser())
 
 app.engine('handlebars', handlebars.engine())
 app.set('views', __dirname + '/views')
 app.set('view engine', 'handlebars')
 app.use(express.static(__dirname + '/public'))
 
-app.use("/", viewsRouter)
-app.use("/api/products", productsRouter)
-app.use("/api/carts", cartsRouter)
-app.use("/api/session", sessionRouter)
+const viewsRouter = new ViewsRouter()
+app.use("/", viewsRouter.getRouter())
+const productsRouter = new ProductsRouter()
+app.use("/api/products", productsRouter.getRouter())
+const cartsRouter = new CartsRouter()
+app.use("/api/carts", cartsRouter.getRouter())
+const sessionRouter = new SessionRouter()
+app.use("/api/session", sessionRouter.getRouter())
 
 mongoose.connect('mongodb+srv://diegohs:diegohs0204@codercluster.b2nuohi.mongodb.net/ecommerce?retryWrites=true&w=majority&appName=CoderCluster')
 
