@@ -6,9 +6,9 @@ import mongoose from 'mongoose'
 import session from 'express-session'
 import { Server } from 'socket.io'
 import { __dirname } from './utils.js'
-import messagesService from './services/message.service.js'
 import initializePassport from './config/passport.config.js'
 import cors from 'cors'
+import configSocket from './config/socket.config.js'
 // Configuración de dotenv
 import 'dotenv/config'
 // Importando los routers
@@ -59,16 +59,4 @@ mongoose.connect(process.env.MONGOO_URL)
 
 // Configuración del socket.io para el chat
 const socketServer = new Server(httpServer)
-socketServer.on('connection', socket => {
-    // Evento correspondiente al chat, recibiendo en nuevo mensaje, añadiendolo a la base de datos.
-    // Para luego volver a enviar todos los mensajes a los usuarios y actualizar la vista.
-    socket.on('newMessage', async message => {
-        try {
-            await messagesService.postMessage(message)
-            const data = await messagesService.getAllMessages()
-            socketServer.emit('updateMessages', data)
-        } catch(error) {
-            console.error("Error en la conexión", error)
-        }
-    })
-})
+configSocket(socketServer)
