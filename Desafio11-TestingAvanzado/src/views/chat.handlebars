@@ -1,0 +1,24 @@
+<header>
+    <form action="/api/sessions/logout" method="POST">
+        <input type="submit" value="Log-out">
+    </form>
+    <a href="/cart"><button>Cart</button></a>
+    <a href="/profile"><button>Perfil</button></a>
+</header>
+<form id="chatForm">
+    <label for="chatInput">Escribe tu mensaje:</label>
+    <input type="text" id="chatInput">
+    <input type="submit" value="Enviar">
+</form>
+
+<div id="messagesContainer">
+{{#each messages}}
+    <p><strong>{{this.user}} dice: </strong>dice:{{this.message}}</p>
+{{/each}}
+</div>
+
+<input type="hidden" name="user" value="{{user}}" id="userName">
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/chat.js"></script>

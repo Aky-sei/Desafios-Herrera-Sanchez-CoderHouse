@@ -1,0 +1,39 @@
+<header>
+    <form action="/api/sessions/logout" method="POST">
+        <input type="submit" value="Log-out">
+    </form>
+    <a href="/products"><button>Seguir Comprando</button></a>
+    <a href="/profile"><button>Perfil</button></a>
+    <a href="/chat"><button>Chat</button></a>
+</header>
+<div id="productsDiv" class="productsDiv">
+    <input type="hidden" value="{{cartID}}" id="cartID">
+    {{#each products}}
+    <div id="product{{this.product._id}}" class="productContainer">
+        <p><strong>Title:</strong> {{this.product.title}}</p>
+        <p><strong>Description:</strong> {{this.product.description}}</p>
+        <p><strong>Code:</strong> {{this.product.code}}</p>
+        <p><strong>Price:</strong> {{this.product.price}}</p>
+        <p><strong>Category:</strong> {{this.product.category}}</p>
+        <p><strong>Id: {{this.product._id}}</strong></p>
+        <p id="quantity{{this.product._id}}"><strong>Quantity: {{this.quantity}}</strong></p>
+        <button onclick="deleteFromCart(`{{this.product._id}}`)">Eliminar del carrito</button>
+    </div>
+    {{/each}}
+    <button onclick="createTicket()">Comprar Productos</button>
+</div>
+<script>
+    const cid = document.getElementById("cartID").value
+    function deleteFromCart(pid) {
+        fetch(`/api/carts/${cid}/products/${pid}`, {
+            method: "DELETE",
+            headers: {'Content-Type': 'application/json'}
+        })
+    }
+    function createTicket() {
+        fetch(`/api/carts/${cid}/purchase`, {
+            method: "GET",
+            headers: {'Content-Type': 'application/json'}
+        })
+    }
+</script>
