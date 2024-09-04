@@ -1,0 +1,213 @@
+paths:
+  /api/products/:
+    get:
+      summary: Obtiene los productos paginados, por defecto, la primera pagina con 10 productos sin ningun orden en particular
+      tags:
+        - Products
+      responses:
+        "200":
+          description: Se obtuvo correctamente los productos
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#components/schemas/Product'
+        "500":
+          description: Error interno del servidor
+    post:
+      summary: Publica un producto en la base de datos
+      tags:
+        - Products
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#components/requestBodies/updateProduct'
+      responses:
+        "200":
+          description: Se actualizó correctamente el producto
+        "400":
+          description: Error del usuario, usualmente cusado por no tener permisos suficientes o intentar acualizar un producto que no te pertenece.
+        "401": 
+          description: Fallo de autorización
+        "500":
+          description: Error interno del servidor
+  /api/products/{pid}:
+    get:
+      summary: Obtiene un solo producto a partir de ID dado en los parametros
+      tags:
+       - Products
+      parameters:
+      - name: pid
+        in: path
+        required: true
+        description: id del producto a obtener
+        schema: 
+          $type: String
+      responses:
+        "200":
+          description: Se obtuvo correctamente el producto
+          content:
+            application/json:
+              schema:
+                $ref: '#components/schemas/Product'
+        "400":
+          description: Error del usuario, usualmente no existe un producto con el ID dado
+        "500":
+          description: Error interno del servidor
+    put:
+      summary: Actualiza un producto a partir del ID recogido en los parametros y el nuevo producto del body
+      tags:
+       - Products
+      parameters:
+      - name: pid
+        in: path
+        required: true
+        description: id del producto a actualizar
+        schema:
+          $type: String
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#components/requestBodies/updateProduct'
+      responses:
+        "200":
+          description: Se actualizo correctamente el producto
+        "400":
+          description: Error del usuario, usualmente el nuevo producto no es valido, o el id otorgado no es un producto existente
+        "401":
+          description: Fallo de autorización
+        "500":
+          description: Error interno del servidor
+    delete:
+      summary: Elimina un producto de la base de datos
+      tags: 
+       - Products
+      parameters:
+      - name: pid
+        in: path
+        required: true
+        description: id del producto a eliminar
+        schema:
+          $type: String
+      responses:
+        "200":
+          description: Se elimino correctamente el producto
+        "400":
+          description: Error del usuario, usualmente no existe un producto con ese ID o se intentó elimnar un prodcuto que no te pertenece
+        "401":
+          description: Fallo de autorización
+        "500":
+          description: Error interno del servidor
+  /api/products/mockingproducts:
+    get:
+      summary: Obtiene una serir de productos falsos con propostiso de testear la velocidad de las respuestas
+      tags: 
+       - Products
+      responses:
+        "200":
+          description: Se obtuvieron correctamente los productos
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#components/schemas/Product'
+        "500":
+          description: Error interno del servidor
+
+components:
+  schemas:
+    Product:
+      type: object
+      properties:
+        _id:
+          type: ObjectId
+          description: ID autogenerado de Mongo
+        title:
+          type: String
+          description: Nombre del producto, este campo es requerido
+        description:
+          type: String
+          description: Descripción del producto, este campo es requerido
+        code:
+          type: String
+          description: Codigo único del producto para identificación, este campo es requerido y único
+        price:
+          type: Number
+          description: Precio unitario del producto, este campo es requerido
+        status:
+          type: Boolean
+          description: Define si el producto esta activo para su compra o no, este campo es requerido
+        stock:
+          type: Number
+          description: Cantidad disponible del producto, este campo es requerido
+        category:
+          type: Sting
+          description: Categoria del producto apra las busquedas, este campo es requerido
+        thumbnail:
+          type: Array
+          description: Imagen representativa del producto
+        owner:
+          type: Sting
+          description: Id del usuario creador del producto
+      example:
+        :id: ObjectId('66b57b9e3e686df5f5797ca1')
+        title: quia
+        description: Et ducimus dolorem et est blanditiis quod ullam.
+        code: praesentium
+        price: 198
+        status: true
+        stock: 927
+        category: possimus
+        thumbnail: []
+        owner: 66b57855e2c8ee0dfcc7c4f0
+  requestBodies:
+    updateProduct:
+      type: Object
+      properties:
+        _id:
+          type: ObjectId
+          description: ID autogenerado de Mongo
+        title:
+          type: String
+          description: Nombre del producto, este campo es requerido
+        description:
+          type: String
+          description: Descripción del producto, este campo es requerido
+        code:
+          type: String
+          description: Codigo único del producto para identificación, este campo es requerido y único
+        price:
+          type: Number
+          description: Precio unitario del producto, este campo es requerido
+        status:
+          type: Boolean
+          description: Define si el producto esta activo para su compra o no, este campo es requerido
+        stock:
+          type: Number
+          description: Cantidad disponible del producto, este campo es requerido
+        category:
+          type: Sting
+          description: Categoria del producto apra las busquedas, este campo es requerido
+        thumbnail:
+          type: Array
+          description: Imagen representativa del producto
+        owner:
+          type: Sting
+          description: Id del usuario creador del producto
+      example:
+        :id: ObjectId('66b57b9e3e686df5f5797ca1')
+        title: quia
+        description: Et ducimus dolorem et est blanditiis quod ullam.
+        code: praesentium
+        price: 198
+        status: true
+        stock: 927
+        category: possimus
+        thumbnail: []
+        owner: 66b57855e2c8ee0dfcc7c4f0

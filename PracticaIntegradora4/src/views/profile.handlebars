@@ -1,0 +1,54 @@
+<header>
+    <form action="/api/sessions/logout" method="POST">
+        <input type="submit" value="Log-out">
+    </form>
+    <a href="/cart"><button>Cart</button></a>
+    <a href="/products"><button>Ir a comprar</button></a>
+    <a href="/chat"><button>Chat</button></a>
+</header>
+<div>
+    <h3>Nombre:</h3>
+    <p>{{user.name}}</p>
+    {{#if user.lastName}}
+    <h3>Apellido:</h3>
+    <p>{{user.lastName}}</p>
+    {{/if}}
+    <h3>E-mail:</h3>
+    <p>{{user.email}}</p>
+    {{#if user.age}}
+    <h3>Edad:</h3>
+    <p>{{user.age}}</p>
+    {{/if}}
+    {{#if user.isAdmin}}
+    <h3>Felicidades, tienes permisos de administrador.</h3>
+    {{else}}
+    <h3>Lamentablemente, no tienes permisos de administrador.</h3>
+    {{/if}}
+    <h3>Rol:</h3>
+    <p>{{user.role}}</p>
+    <a href="/upload"><button>Upload Files</button></a>
+    <button id="upgradeButton">Upgrade profile</button>
+    <input type="hidden" id="userId" value="{{userId}}">
+</div>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    let userId = document.getElementById("userId").value
+    let upgradeButton = document.getElementById("upgradeButton")
+    upgradeButton.addEventListener("click", async (e) => {
+    e.preventDefault()
+    await fetch(`http://localhost:8080/api/users/premium/${userId}`, {
+        method: "POST",
+        headers: {'Content-Type': 'application/json'}
+    }).then(res => res.json())
+    .then((body) => {
+        if(body.status === "success") {
+            window.location.href = '/profile'
+        } else {
+            Swal.fire({
+                title:body.errorMessage,
+                allowOutsideClick: true
+            })
+        }
+    })
+})
+</script>
